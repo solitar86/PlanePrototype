@@ -32,6 +32,8 @@ public class PlaneController_3 : MonoBehaviour
 
     private Vector3 planeVisualRotation = Vector3.zero;
 
+    public float ThrustNormalized => _currentThrust / _maxSpeed;
+
 
     private void Awake()
     {
