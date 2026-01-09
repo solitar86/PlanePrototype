@@ -6,28 +6,35 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] private float _perfectLandingThreshold = 3f;
     [SerializeField] private float _smoothLandingThreshold = 6f;
     [SerializeField] private float _maxLandingThreshold = 9f;
+    [SerializeField] private Color _textColor = Color.white;
     private void OnCollisionEnter(Collision collision)
     {
         var velocity = GetComponent<PlaneController_3>().Velocity;
+        float landingForce = Mathf.Abs(velocity.y);
 
-        Debug.Log(velocity);
+        Debug.Log(landingForce);
 
-        //if (landingForce <  _perfectLandingThreshold )
-        //{
-        //    Debug.Log("Perfect Landing");
-        //    return;
-        //}
-        //else if (landingForce < _smoothLandingThreshold)
-        //{
-        //    Debug.Log("Smooth Landing");
-        //    return;
-        //}
-        //else if(landingForce < _maxLandingThreshold)
-        //{
-        //    Debug.Log("Rough Landing");
-        //    return;
-        //}
+        if (landingForce < _perfectLandingThreshold)
+        {
+            SpawnFloatingText("Perfect!");
+            return;
+        }
+        else if (landingForce < _smoothLandingThreshold)
+        {
+            SpawnFloatingText("Smooth!");
+            return;
+        }
+        else if (landingForce < _maxLandingThreshold)
+        {
+            SpawnFloatingText("Rough!");
+            return;
+        }
 
-        Debug.Log("CRASHED");
+        SpawnFloatingText("CRASHED!");
+    }
+
+    private void SpawnFloatingText(string text)
+    {
+        FloatingText.Create(transform.position, text, _textColor);
     }
 }
