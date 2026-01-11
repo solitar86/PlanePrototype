@@ -17,6 +17,10 @@ public class PlaneController_3 : MonoBehaviour
     [Space(15)]
     [SerializeField] private float _resetSpeed = 3f;
     [Space(15)]
+    [SerializeField] private float _maxYPositionValue = 40f;
+    [SerializeField] private float _maxXPositionValue = 40f;
+    [SerializeField] private float _maxZPositionValue = 40f;
+    [Space(15)]
     [SerializeField] private Transform _planeVisual;
     [SerializeField] private Transform _propeller;
     [SerializeField] private float _propellerSpeed = 10f;
@@ -35,6 +39,10 @@ public class PlaneController_3 : MonoBehaviour
     private bool _canTurn = false;
     private bool _canRoll = false;
     private bool _isOnGround = false;
+    private bool _controlsDisabled = false;
+
+    bool _isOutOfBounds = false;
+    bool _isReturningToPlayArea = false;
 
     public Vector3 Velocity;
 
@@ -46,6 +54,10 @@ public class PlaneController_3 : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+
+        // Take starting rotation and set it to current yaw
+        // so we don't steet toward 0 on first thrust.
+        _currentYaw = transform.rotation.eulerAngles.y;
 
     }
     void Start()
@@ -162,19 +174,44 @@ public class PlaneController_3 : MonoBehaviour
 
         Velocity = velocity;
 
-        //if(_isOnGround && _hasLift == false)
-        //{
-        //    // We are on ground, lerp plane upright.
-        //    Quaternion targetRotation = Quaternion.Euler(0, _currentYaw, 0);
-        //    _rigidbody.rotation = Quaternion.Lerp(_rigidbody.rotation,
-        //                                            targetRotation,
-        //                                            Time.fixedDeltaTime * _resetSpeed);
-        //}
+        // Limit plane position to within playarea.
+        if (_rigidbody.position.y > _maxYPositionValue) _rigidbody.position =
+                                                        new Vector3(_rigidbody.position.x,
+                                                        _maxYPositionValue,
+                                                        _rigidbody.position.z);
+
+        if (Mathf.Abs(_rigidbody.position.x) > _maxXPositionValue || Mathf.Abs(_rigidbody.position.z) > _maxZPositionValue)
+        {
+            // We have left play area
+            _isOutOfBounds = true;
+            Debug.Log("Out of bounds");
+        }
+
+        if(_isOutOfBounds == true && _isReturningToPlayArea == false)
+        {
+            // We are out of bounds and haven't yet turned back.
+            _currentYaw -= 180;
+            _isReturningToPlayArea = true;
+            _controlsDisabled = true;
+            Debug.Log("Turning around");
+        }
+
+        if (_isOutOfBounds == true && Mathf.Abs(_rigidbody.position.x) < _maxXPositionValue && Mathf.Abs(_rigidbody.position.z) < _maxZPositionValue)
+        {
+            // We are within within play area.
+            _isOutOfBounds = false;
+            _isReturningToPlayArea = false;
+            _controlsDisabled = false;
+            Debug.Log("Back within bounds.");
+        }
+
+
     }
 
     private bool CanTurn()
     {
-        return _currentThrust > _minThrustToTurn;
+
+        return _currentThrust > _minThrustToTurn && _controlsDisabled == false;
     }
 
     private bool CanRoll()
@@ -213,6 +250,6 @@ public class PlaneController_3 : MonoBehaviour
     void OnGUI()
     {
         GUI.Label(new Rect(25, 25, 100, 50), "<color=#000000>Thrust: " + _currentThrust.ToString("F2") + "</color>");
-        GUI.Label(new Rect(25, 60, 100, 50), "<color=#000000>Velocity: " + _rigidbody.linearVelocity.ToString("F2") + "</color>");
+        GUI.Label(new Rect(25, 60, 150, 50), "<color=#000000>WASD to Steer\nSpace/Shift to throttle</color>");
     }
 }
