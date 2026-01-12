@@ -28,15 +28,21 @@ public class PlaneController_3 : MonoBehaviour
     [SerializeField] private float _planeVisualMaxPitch = 30f;
     [SerializeField] private float _planeVisualMaxRoll = 30f;
     [SerializeField] private float _planeVisualRotationSpeed = 10f;
+    [Space(15)]
+    [SerializeField] private Transform[] _cameraHolders;
+
 
     private InputAction _turnAction;
     private InputAction _thrustAction;
-    private InputAction _restart;
+    private InputAction _switchCamera;
+
     private Rigidbody _rigidbody;
 
     private float _currentYaw = 0f;
     private float _currentPitch = 0f;
     private float _currentThrust = 0f;
+
+    private int _cameraIndex = 0;
 
     private bool _hasLift = false;
     private bool _canTurn = false;
@@ -47,11 +53,13 @@ public class PlaneController_3 : MonoBehaviour
     bool _isOutOfBounds = false;
     bool _isReturningToPlayArea = false;
 
-    public Vector3 Velocity;
-
     private Vector3 planeVisualRotation = Vector3.zero;
 
     public float ThrustNormalized => _currentThrust / _maxSpeed;
+    public Vector3 Velocity;
+
+    //private float _outOfBoundsMax = 3f;
+    //private float _outOfBoundsTimer;
 
 
     private void Awake()
@@ -66,7 +74,9 @@ public class PlaneController_3 : MonoBehaviour
     {
         _turnAction = InputSystem.actions.FindAction("Turn");
         _thrustAction = InputSystem.actions.FindAction("Thrust");
+        _switchCamera = InputSystem.actions.FindAction("SwitchCamera");
 
+        _switchCamera.Enable();
         _thrustAction.Enable();
         _turnAction.Enable();
     }
@@ -134,8 +144,12 @@ public class PlaneController_3 : MonoBehaviour
         _canRoll = CanRoll();
         _isOnGround = IsOnGround();
 
-
         _propeller.localRotation *= Quaternion.Euler(0, 0, _propellerSpeed * _currentThrust * Time.deltaTime);
+
+        if(_switchCamera.WasPressedThisFrame())
+        {
+            SwitchCamera();
+        }
 
     }
 
@@ -258,11 +272,35 @@ public class PlaneController_3 : MonoBehaviour
         return false;
     }
 
+    private void SwitchCamera()
+    {
+        _cameraIndex++;
+        Camera.main.transform.SetParent(_cameraHolders[_cameraIndex % _cameraHolders.Length], false);
+    }
+
 
     void OnGUI()
     {
-        GUI.Label(new Rect(25, 25, 100, 50), "<color=#000000>Thrust: " + _currentThrust.ToString("F2") + "</color>");
-        GUI.Label(new Rect(25, 60, 150, 50), "<color=#000000>WASD to Steer\nSpace/Shift to throttle</color>");
+        if(GameManager._HasGameStarted)
+        {
+            GUI.Label(new Rect(25, 25, 100, 50), "<color=#000000>Thrust: " + _currentThrust.ToString("F2") + "</color>");
+            GUI.Label(new Rect(25, 60, 150, 50), "<color=#000000>WASD to Steer\nSpace/Shift to throttle</color>");
+        }
+        else if(GameManager._isGameOver)
+        {
+             
+        }
+        else
+        {
+            GUI.Label(new Rect(25, 60, 300, 300), "<color=#000000>Deliver boxes to their appropriate islands.\n" +
+                "Smoother landings grant more score.\n" +
+                "Orange boxes are worth double.\n" +
+                "Take off to start game, you have 90seconds.\n\n" +
+                "WASD or LeftStick to Steer\n" +
+                "Space / Shift or Triggers to throttle Up/Down.\n" +
+                "Tab or RightStick Down to switch camera.</color>");
+        }
+
 
     }
 }

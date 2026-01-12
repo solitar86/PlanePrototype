@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlanerController_v2 : MonoBehaviour
 {
-    [SerializeField] private float _turnSpeed = 10f;
+   // [SerializeField] private float _turnSpeed = 10f;
     [SerializeField] private float _maxTurnSpeed = 100;
     private InputAction _turnAction;
     private InputAction _thrustAction;

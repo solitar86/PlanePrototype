@@ -8,11 +8,14 @@ public class DeliverySpawner : MonoBehaviour
     [SerializeField] private float _spawnInterval = 5f;
     [SerializeField] private BoxCollider[] _spawnAreas;
     [SerializeField] private Transform _deliveryPrefab;
+    [SerializeField] private int _seed;
+    System.Random RNG;
 
-    System.Random RNG = new System.Random(999);
 
     IEnumerator Start()
     {
+
+        RNG = new System.Random(_seed);
         yield return new WaitWhile(() => GameManager._HasGameStarted == false);
         SpawnDelivery();
         InvokeRepeating(nameof(SpawnDelivery), _spawnInterval, _spawnInterval);

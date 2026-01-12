@@ -1,3 +1,4 @@
+using Project.SFX;
 using System;
 using System.Net.NetworkInformation;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class Player_CollisionHandler : MonoBehaviour
     [SerializeField] private Color _textColor = Color.white;
     [SerializeField] private Transform _crashedPlane;
     [SerializeField] private Transform _planeVisual;
+    [SerializeField] private Sound _crashSound;
 
     private bool _isFlying;
     private bool _isTakingOff;
@@ -38,6 +40,8 @@ public class Player_CollisionHandler : MonoBehaviour
     }
     private void Update()
     {
+        if (_isCrashed == true) return;
+
         if (_isTakingOff == true)
         {
             timer += Time.deltaTime;
@@ -63,6 +67,8 @@ public class Player_CollisionHandler : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        if (_isCrashed == true) return; 
+
         if (collision.gameObject.TryGetComponent<Deliverable>(out Deliverable deliverable))
         {
             Debug.Log("Deliverable");
@@ -131,6 +137,7 @@ public class Player_CollisionHandler : MonoBehaviour
 
         _isCrashed = true;
         lastLandingType = LandingType.Crash;
+        AudioPlayer.PlaySoundAtPoint(this, _crashSound, transform.position, true);
     }
 
     private void FixedUpdate()

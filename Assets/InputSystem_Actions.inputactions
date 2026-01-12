@@ -32,6 +32,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchCamera",
+                    "type": "Button",
+                    "id": "26ca82b6-bb02-4ac6-8ac2-b166d19927bb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -186,6 +195,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Restart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5e6a6cb5-227c-43e2-af3c-5b78795f1fef",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "SwitchCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8eaf9aa7-d0a6-496f-87c2-499fd38b2d19",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "SwitchCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

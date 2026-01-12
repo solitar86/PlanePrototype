@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,15 +18,20 @@ public class GameManager : MonoBehaviour
 
     private InputAction _restart;
 
+    [SerializeField] private GameObject _quitCanvas;
+
     private void Awake()
     {
-        _restart = InputSystem.actions.FindAction("Restart");
-        _restart.Enable();
-
-        RestartGame();
+        _isGameOver = false;
+        _HasGameStarted = false;
         _musicSource = GetComponentInChildren<AudioSource>();
         _timeText = GetComponentInChildren<TextMeshProUGUI>();
         _maxTime = 90f;
+
+        _restart = InputSystem.actions.FindAction("Restart");
+        _restart.Enable();
+
+        _quitCanvas.SetActive(false);
     }
 
     IEnumerator Start()
@@ -52,7 +58,16 @@ public class GameManager : MonoBehaviour
 
         if (_restart.WasPerformedThisFrame())
         {
-            RestartGame();
+            if(_isGameOver )
+            {
+                Debug.Log("Restarting game");
+                RestartGame();
+            }
+            else
+            {
+                _quitCanvas.SetActive(!_quitCanvas.activeInHierarchy);
+                _quitCanvas.GetComponentInChildren<Button>().Select();
+            }
         }
 
     }
@@ -63,6 +78,7 @@ public class GameManager : MonoBehaviour
         {
             _timeText.text = "Game Over!\nFinal Score : " + FindFirstObjectByType<PlayerScoreManager>().CurrentScore.ToString();
             _timeText.text += "\n\nEsc / Start\nto Restart";
+            _quitCanvas.SetActive(false);
         }
         else
         {

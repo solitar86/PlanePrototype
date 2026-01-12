@@ -10,7 +10,7 @@ public class PlayerScoreManager : MonoBehaviour
     private static float _roughLandingMultiplier = 0.85f;
 
 
-    public static float AddDeliveryScore(Player_CollisionHandler.LandingType landingType)
+    public static float AddDeliveryScore(Player_CollisionHandler.LandingType landingType, Deliverable.IslandColor color = Deliverable.IslandColor.Blue)
     {
         float multiplier = 1f;
         float singleDeliveryScore = 100f;
@@ -32,6 +32,8 @@ public class PlayerScoreManager : MonoBehaviour
                 multiplier = 0.2f;
                 break;
         }
+
+        if (color == Deliverable.IslandColor.Orange) multiplier *= 2;
 
         _currentScore += singleDeliveryScore * multiplier;
 
