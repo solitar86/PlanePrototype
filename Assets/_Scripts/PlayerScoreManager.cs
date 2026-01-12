@@ -3,16 +3,19 @@ using UnityEngine;
 public class PlayerScoreManager : MonoBehaviour
 {
     private static float _currentScore;
+    public float CurrentScore => _currentScore;
 
     private static float _perfectLandingMultiplier = 2;
     private static float _smoothLandingMultiplier = 1.25f;
     private static float _roughLandingMultiplier = 0.85f;
 
 
-    public static void AddDeliveryScore(Player_CollisionHandler.LandingType landingType)
+    public static float AddDeliveryScore(Player_CollisionHandler.LandingType landingType)
     {
         float multiplier = 1f;
         float singleDeliveryScore = 100f;
+
+        if(GameManager._isGameOver) { return 0; }
 
         switch (landingType)
         {
@@ -26,13 +29,12 @@ public class PlayerScoreManager : MonoBehaviour
                 multiplier = _roughLandingMultiplier;
                 break;
             case Player_CollisionHandler.LandingType.Crash:
-                multiplier = 0f;
+                multiplier = 0.2f;
                 break;
         }
 
         _currentScore += singleDeliveryScore * multiplier;
 
-        Debug.Log("ADDED " + singleDeliveryScore * multiplier);
-        Debug.Log("Current Score: " + _currentScore);
+        return singleDeliveryScore * multiplier;
     }
 }

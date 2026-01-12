@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DeliverySpawner : MonoBehaviour
@@ -9,8 +11,10 @@ public class DeliverySpawner : MonoBehaviour
 
     System.Random RNG = new System.Random(999);
 
-    private void Start()
+    IEnumerator Start()
     {
+        yield return new WaitWhile(() => GameManager._HasGameStarted == false);
+        SpawnDelivery();
         InvokeRepeating(nameof(SpawnDelivery), _spawnInterval, _spawnInterval);
     }
 
@@ -25,7 +29,25 @@ public class DeliverySpawner : MonoBehaviour
     {
         var position = RandomPointInBoxCollider(boxCollider);
         position += Vector3.up * 15f;
-        Instantiate(_deliveryPrefab, position, Quaternion.identity);
+        var go = Instantiate(_deliveryPrefab, position, Quaternion.identity);
+        var delivery = go.GetComponent<Deliverable>();
+        var colorToAvoid = boxCollider.GetComponent<IslandSurface>().IslandColor;
+
+        var colorToAssign = GetRandomIslandColorWithExlusion(colorToAvoid);
+        delivery.SetColor(colorToAssign);
+
+    }
+
+    private Deliverable.IslandColor GetRandomIslandColorWithExlusion(Deliverable.IslandColor colorToAvoid)
+    {
+        var colorToReturn = Deliverable.IslandColor.Blue;
+        var values = Deliverable.IslandColor.GetValues(typeof(Deliverable.IslandColor));
+
+        do
+        {
+            colorToReturn = (Deliverable.IslandColor)values.GetValue(RNG.Next(values.Length));
+        } while (colorToReturn == colorToAvoid);
+        return colorToReturn;
     }
 
     public Vector3 RandomPointInBoxCollider(BoxCollider box)
@@ -48,4 +70,5 @@ public class DeliverySpawner : MonoBehaviour
     {
         return min + (float)rng.NextDouble() * (max - min);
     }
+
 }

@@ -157,7 +157,7 @@ Rigidbody:
   m_GameObject: {fileID: 8485932485457636249}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 8
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -214,8 +214,13 @@ MonoBehaviour:
     Volume: 0.3
     Pitch: 1
     SpacialBlend: 0
-  _type: 0
+  _islandColor: 0
   _parachute: {fileID: 6844670090694123231}
+  _blueMaterial: {fileID: 2100000, guid: e18ded4b611aa8f4a9f0f261d2f29537, type: 2}
+  _greenMaterial: {fileID: 2100000, guid: 74117f645ca87544896e430b75e9a316, type: 2}
+  _redMaterial: {fileID: 2100000, guid: a4b62a69d54e80347bd546999c6d4b9e, type: 2}
+  _yellowMaterial: {fileID: 2100000, guid: 9ae30b08e7cf7544db1c883a3c717b0d, type: 2}
+  _orangeMaterial: {fileID: 2100000, guid: d1a5903867c8f0a4a8a94c3fe36dad11, type: 2}
 --- !u!1001 &2466968838026459648
 PrefabInstance:
   m_ObjectHideFlags: 0

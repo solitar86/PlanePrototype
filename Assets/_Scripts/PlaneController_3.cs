@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlaneController_3 : MonoBehaviour
 {
@@ -27,8 +28,10 @@ public class PlaneController_3 : MonoBehaviour
     [SerializeField] private float _planeVisualMaxPitch = 30f;
     [SerializeField] private float _planeVisualMaxRoll = 30f;
     [SerializeField] private float _planeVisualRotationSpeed = 10f;
+
     private InputAction _turnAction;
     private InputAction _thrustAction;
+    private InputAction _restart;
     private Rigidbody _rigidbody;
 
     private float _currentYaw = 0f;
@@ -52,9 +55,8 @@ public class PlaneController_3 : MonoBehaviour
 
 
     private void Awake()
-    {
+    {   
         _rigidbody = GetComponent<Rigidbody>();
-
         // Take starting rotation and set it to current yaw
         // so we don't steet toward 0 on first thrust.
         _currentYaw = transform.rotation.eulerAngles.y;
@@ -64,6 +66,7 @@ public class PlaneController_3 : MonoBehaviour
     {
         _turnAction = InputSystem.actions.FindAction("Turn");
         _thrustAction = InputSystem.actions.FindAction("Thrust");
+
         _thrustAction.Enable();
         _turnAction.Enable();
     }
@@ -75,7 +78,7 @@ public class PlaneController_3 : MonoBehaviour
         // If player is trying to turn, handle that.
         if (turnVector != Vector2.zero)
         {
-            if(_canTurn)
+            if (_canTurn)
             {
                 // We are going fast enough to allow player to turn plane (even on ground)
                 _currentYaw += turnVector.x * Time.deltaTime * _turnSpeed;
@@ -87,7 +90,7 @@ public class PlaneController_3 : MonoBehaviour
                 _currentPitch += turnVector.y * Time.deltaTime * _turnSpeed;
                 _currentPitch = Mathf.Clamp(_currentPitch, -_maxPitch, _maxPitch);
 
-                if(_canRoll)
+                if (_canRoll)
                 {
                     planeVisualRotation.z = -turnVector.x * _planeVisualMaxRoll;
                 }
@@ -103,7 +106,7 @@ public class PlaneController_3 : MonoBehaviour
             planeVisualRotation.x = 0f;
         }
 
-        if(_canRoll == false)
+        if (_canRoll == false)
         {
             // We are too close to ground so level out visual rotation so wings don't touch ground.
             planeVisualRotation.z = 0f;
@@ -135,6 +138,7 @@ public class PlaneController_3 : MonoBehaviour
         _propeller.localRotation *= Quaternion.Euler(0, 0, _propellerSpeed * _currentThrust * Time.deltaTime);
 
     }
+
 
     private void FixedUpdate()
     {
@@ -187,7 +191,7 @@ public class PlaneController_3 : MonoBehaviour
             Debug.Log("Out of bounds");
         }
 
-        if(_isOutOfBounds == true && _isReturningToPlayArea == false)
+        if (_isOutOfBounds == true && _isReturningToPlayArea == false)
         {
             // We are out of bounds and haven't yet turned back.
             _currentYaw -= 180;
@@ -232,17 +236,25 @@ public class PlaneController_3 : MonoBehaviour
 
     private bool IsOnGround()
     {
+
+
         // We are checking not objectively down but down based on plane
-        Debug.DrawLine(transform.position, transform.position + transform.up *-1f * _canRollGroundCheckDistance, Color.yellow);
+        Debug.DrawLine(transform.position, transform.position + transform.up * -1f * _canRollGroundCheckDistance, Color.yellow);
 
         Ray groundRay = new Ray(transform.position, transform.up * -1);
 
         if (Physics.Raycast(groundRay, out RaycastHit hitInfo, _groundCheckDistance))
         {
             // Bottom of plane is touching ground
+
             return true;
         }
 
+        if (GameManager._HasGameStarted == false)
+        {
+            // Start the game when we first lift off
+            GameManager.StarGame();
+        }
         return false;
     }
 
@@ -251,5 +263,6 @@ public class PlaneController_3 : MonoBehaviour
     {
         GUI.Label(new Rect(25, 25, 100, 50), "<color=#000000>Thrust: " + _currentThrust.ToString("F2") + "</color>");
         GUI.Label(new Rect(25, 60, 150, 50), "<color=#000000>WASD to Steer\nSpace/Shift to throttle</color>");
+
     }
 }

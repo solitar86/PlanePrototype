@@ -9,6 +9,8 @@ public class Player_CollisionHandler : MonoBehaviour
     [SerializeField] private float _smoothLandingThreshold = 6f;
     [SerializeField] private float _maxLandingThreshold = 9f;
     [SerializeField] private Color _textColor = Color.white;
+    [SerializeField] private Transform _crashedPlane;
+    [SerializeField] private Transform _planeVisual;
 
     private bool _isFlying;
     private bool _isTakingOff;
@@ -110,9 +112,25 @@ public class Player_CollisionHandler : MonoBehaviour
 
     private void CrashedPlane(Collision collision)
     {
+        CrashPlane();
+        SpawnFloatingText("CRASHED!");
+        var go = Instantiate(_crashedPlane, transform.position, _planeVisual.rotation);
+        var rigidBodies = go.GetComponentsInChildren<Rigidbody>();
+
+        foreach (var item in rigidBodies)
+        {
+            item.AddExplosionForce(300, transform.position, 10f);
+        }
+        Camera.main.transform.SetParent(null);
+        gameObject.SetActive(false);
+        GameManager.SetGameOver();
+    }
+
+    private void CrashPlane()
+    {
+
         _isCrashed = true;
         lastLandingType = LandingType.Crash;
-        SpawnFloatingText("CRASHED into: " + collision == null ? collision.gameObject.name : "null");
     }
 
     private void FixedUpdate()
