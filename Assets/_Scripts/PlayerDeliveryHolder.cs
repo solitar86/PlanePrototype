@@ -63,8 +63,11 @@ public class PlayerDeliveryHolder : MonoBehaviour
 
     void OnGUI()
     {
+        GUIStyle style = new GUIStyle();
+        style.fontSize = Screen.height / 36; 
+
         var text = ParseCurrentDeliveryString();
-        GUI.Label(new Rect(_inventoryXPos, _inventoryYPos, 100, 300), "<color=#000000>" + text + "</color>");
+        GUI.Label(new Rect(_inventoryXPos, _inventoryYPos, 100, 300), "<color=#000000>" + text + "</color>", style);
     }
 
 

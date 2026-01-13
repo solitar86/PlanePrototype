@@ -1384,7 +1384,7 @@ GameObject:
   - component: {fileID: 475683494}
   - component: {fileID: 475683493}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: MiniMap_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1450,7 +1450,6 @@ RectTransform:
   m_Children:
   - {fileID: 1940106206}
   - {fileID: 2073702952}
-  - {fileID: 1542516589}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1971,6 +1970,7 @@ MonoBehaviour:
   _cameraHolders:
   - {fileID: 390947512}
   - {fileID: 123878467}
+  _fontFraction: 36
   Velocity: {x: 0, y: -6, z: 0}
 --- !u!65 &661422184
 BoxCollider:
@@ -2147,7 +2147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _inventoryXPos: 10
-  _inventoryYPos: 160
+  _inventoryYPos: 250
   _scoringSound:
     Clip: {fileID: 8300000, guid: f1b2f03a9fef4ac4ab784f9b90b02550, type: 3}
     Mixergroup: {fileID: 7328892479001995458, guid: 33407f59a45896d4c8c39e1fe94d3379, type: 2}
@@ -4195,11 +4195,11 @@ Transform:
   m_GameObject: {fileID: 1542516588}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -954, y: -174.3, z: 3.7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 1.7333374, y: 105.64667, z: 5.8}
+  m_LocalScale: {x: 0.2888889, y: 0.28888896, z: 0.28888896}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 475683495}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &1542516590
 MonoBehaviour:
@@ -4213,7 +4213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
@@ -4280,7 +4280,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 49.25
+  orthographic size: 50
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -5161,11 +5161,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 475683495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -743, y: -318}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 48, y: 46}
   m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &1940106207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5233,11 +5233,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 475683495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -743, y: -318.00006}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 51.000244, y: 51}
   m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &2073702953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5743,5 +5743,6 @@ SceneRoots:
   - {fileID: 661422182}
   - {fileID: 1121051924}
   - {fileID: 399342759}
+  - {fileID: 1542516589}
   - {fileID: 475683495}
   - {fileID: 688250178}

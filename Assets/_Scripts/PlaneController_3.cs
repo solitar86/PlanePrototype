@@ -30,6 +30,7 @@ public class PlaneController_3 : MonoBehaviour
     [SerializeField] private float _planeVisualRotationSpeed = 10f;
     [Space(15)]
     [SerializeField] private Transform[] _cameraHolders;
+    [SerializeField] private int _fontFraction = 25;
 
 
     private InputAction _turnAction;
@@ -281,10 +282,13 @@ public class PlaneController_3 : MonoBehaviour
 
     void OnGUI()
     {
-        if(GameManager._HasGameStarted)
+        GUIStyle style = new GUIStyle();
+        style.fontSize = Screen.height / 36;
+
+        if (GameManager._HasGameStarted)
         {
-            GUI.Label(new Rect(25, 25, 100, 50), "<color=#000000>Thrust: " + _currentThrust.ToString("F2") + "</color>");
-            GUI.Label(new Rect(25, 60, 150, 50), "<color=#000000>WASD to Steer\nSpace/Shift to throttle</color>");
+            GUI.Label(new Rect(25, 25, 100, 50), "<color=#000000>Thrust: " + _currentThrust.ToString("F2") + "</color>", style);
+            //GUI.Label(new Rect(25, 60, 150, 50), "<color=#000000>WASD to Steer\nSpace/Shift to throttle</color>", style);
         }
         else if(GameManager._isGameOver)
         {
@@ -298,7 +302,7 @@ public class PlaneController_3 : MonoBehaviour
                 "Take off to start game, you have 90seconds.\n\n" +
                 "WASD or LeftStick to Steer\n" +
                 "Space / Shift or Triggers to throttle Up/Down.\n" +
-                "Tab or RightStick Down to switch camera.</color>");
+                "Tab or RightStick Down to switch camera.</color>", style);
         }
 
 
